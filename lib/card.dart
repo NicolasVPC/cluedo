@@ -5,6 +5,13 @@
 // string -> name of the card
 // 
 
+// JSON format:
+// {
+//    "cardType": "none",
+//    "img": "./img/img.png",
+//    "name": "card name"
+// }
+
 enum CardType {
   none,
   character,
