@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 // class Card
 // type -> character, weapon, room
 // string -> path for file img

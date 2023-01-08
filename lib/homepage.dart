@@ -1,3 +1,8 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -20,8 +25,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  var client = http.Client();
 
-  void _incrementCounter() {
+  void _incrementCounter() async {
     setState(() {
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below
@@ -30,6 +36,22 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
       _counter++;
     });
+  }
+
+  Future _sendMessage() async {
+    try {
+      var response = await client.post(
+          Uri.http('localhost:8008', 'whatsit/create'),
+          body: {'name': 'doodle', 'color': 'blue'});
+      print(utf8.decode(response.bodyBytes));
+      //var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map; //name=doodle&color=blue
+      //var uri = Uri.parse(decodedResponse['uri'] as String);
+      //print(await client.get(uri));
+      
+      // error but don't understand why
+    } finally {
+      client.close();
+    }
   }
 
   @override
@@ -74,7 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
               style: Theme.of(context).textTheme.headline4,
             ),
             FloatingActionButton(
-              onPressed: _incrementCounter,
+              onPressed: _sendMessage,
               tooltip: "test",
               child: const Icon(Icons.abc))
           ],
