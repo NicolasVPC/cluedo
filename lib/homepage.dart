@@ -22,26 +22,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  var client = http.Client();
+  final _usernameContollerField = TextEditingController();
+  final _pinContollerField = TextEditingController();
+  final _client = http.Client(); // my client to connect
 
-  void _incrementCounter() async {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
-  Future _sendMessage() async {
+  void _sendMessage(Map<String, String> data) async {
     try {
-      var response = await client.post(
+      var response = await _client.post(
           Uri.http('localhost:8008', 'whatsit/create'),
-          body: {'name': 'doodle', 'color': 'blue'});
-
+          body: data);
       var decodedResponse = utf8.decode(response.bodyBytes);
       print(decodedResponse);
       //var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map; //name=doodle&color=blue
@@ -72,44 +61,41 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'You have pushed the button this many times:',
+              'Inserisci il tuo nome ed un pin per la partita:',
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
+            Form(child: Column(children: [
+             Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                child: TextField(
+                  controller: _usernameContollerField,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'username',
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                child: TextField(
+                  controller: _pinContollerField,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'pin',
+                  ),
+                ),
+              ),
+            ],)),
             FloatingActionButton(
-              onPressed: _sendMessage,
+              onPressed: () => _sendMessage({"username": _usernameContollerField.text, "pin": _pinContollerField.text}),
               tooltip: "test",
               child: const Icon(Icons.abc))
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
