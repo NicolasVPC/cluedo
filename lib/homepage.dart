@@ -3,6 +3,8 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 
+import 'login.dart';
+
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
@@ -22,9 +24,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final _usernameContollerField = TextEditingController();
-  final _pinContollerField = TextEditingController();
   final _client = http.Client(); // my client to connect
+  var login = Login();
 
   void _sendMessage(Map<String, String> data) async {
     try {
@@ -64,33 +65,9 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'Inserisci il tuo nome ed un pin per la partita:',
-            ),
-            Form(child: Column(children: [
-             Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                child: TextField(
-                  controller: _usernameContollerField,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'username',
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                child: TextField(
-                  controller: _pinContollerField,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'pin',
-                  ),
-                ),
-              ),
-            ],)),
+            login,
             FloatingActionButton(
-              onPressed: () => _sendMessage({"username": _usernameContollerField.text, "pin": _pinContollerField.text}),
+              onPressed: () => _sendMessage({"username": login.usernameContollerField.text, "pin": login.pinContollerField.text}),
               tooltip: "test",
               child: const Icon(Icons.abc))
           ],
