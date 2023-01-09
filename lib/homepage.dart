@@ -3,6 +3,8 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 
+import 'login.dart';
+
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
@@ -22,9 +24,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final _usernameContollerField = TextEditingController();
-  final _pinContollerField = TextEditingController();
   final _client = http.Client(); // my client to connect
+  var login = Login();
 
   void _sendMessage(Map<String, String> data) async {
     try {
@@ -48,12 +49,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
@@ -64,35 +59,11 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'Inserisci il tuo nome ed un pin per la partita:',
-            ),
-            Form(child: Column(children: [
-             Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                child: TextField(
-                  controller: _usernameContollerField,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'username',
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                child: TextField(
-                  controller: _pinContollerField,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'pin',
-                  ),
-                ),
-              ),
-            ],)),
-            FloatingActionButton(
-              onPressed: () => _sendMessage({"username": _usernameContollerField.text, "pin": _pinContollerField.text}),
-              tooltip: "test",
-              child: const Icon(Icons.abc))
+            login, // login form
+            FloatingActionButton( // submit login form
+              onPressed: () => _sendMessage({"username": login.usernameContollerField.text, "pin": login.pinContollerField.text}),
+              tooltip: "Start",
+              child: const Icon(Icons.play_circle_fill))
           ],
         ),
       ),
