@@ -29,11 +29,20 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _sendMessage(Map<String, String> data) async {
     try {
-      var response = await _client.post(
-          Uri.http('localhost:8008', 'whatsit/create'),
-          body: data);
+      print("start\n");
+      http.Response response = await _client.post(
+          Uri.http('localhost:8008'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(data));
+      
+      print("test\n");
       var decodedResponse = utf8.decode(response.bodyBytes);
-      print(decodedResponse);
+      var decoded2 = response.body;
+      
+      print("a"+decodedResponse);
+      print("b"+decoded2);
       //var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map; //name=doodle&color=blue
       //var uri = Uri.parse(decodedResponse['uri'] as String);
       //print(await client.get(uri));
@@ -41,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
     } 
     catch(e) {
       print(e);
-    } 
+    }
     // finally { // if I close the client then it is impossible to communicate with the server
     //   client.close();
     // }
