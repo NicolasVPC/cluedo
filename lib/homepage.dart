@@ -27,15 +27,18 @@ class _MyHomePageState extends State<MyHomePage> {
   final _client = http.Client(); // my client to connect
   var login = Login();
 
-  void _sendMessage(Map<String, String> data) async {
+  Future<http.Response?> _sendMessage(Map<String, String> data) async {
     try {
       print("start\n");
+
       http.Response response = await _client.post(
-          Uri.http('localhost:8008'),
+          Uri.http('localhost:8008'), 
           headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
+            'content-type': 'application/json',
           },
-          body: jsonEncode(data));
+          body: jsonEncode(data),
+          encoding: Encoding.getByName('UTF-8')
+        );
       
       print("test\n");
       var decodedResponse = utf8.decode(response.bodyBytes);
@@ -43,17 +46,15 @@ class _MyHomePageState extends State<MyHomePage> {
       
       print("a"+decodedResponse);
       print("b"+decoded2);
-      //var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map; //name=doodle&color=blue
-      //var uri = Uri.parse(decodedResponse['uri'] as String);
-      //print(await client.get(uri));
-      // error but don't understand why
+      return response;
     } 
     catch(e) {
       print(e);
     }
-    // finally { // if I close the client then it is impossible to communicate with the server
-    //   client.close();
-    // }
+    return null;
+    //finally { // if I close the client then it is impossible to communicate with the server
+    //  //client.close();
+    //}
   }
 
   @override
