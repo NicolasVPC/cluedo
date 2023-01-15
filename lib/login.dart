@@ -4,25 +4,17 @@ class Login extends StatefulWidget {
     final TextEditingController _usernameContollerField = TextEditingController();
     final TextEditingController _pinContollerField = TextEditingController();
 
-    TextEditingController get usernameContollerField {
-      return _usernameContollerField;
-    }
+    TextEditingController get usernameContollerField => _usernameContollerField;
 
-    TextEditingController get pinContollerField {
-      return _pinContollerField;
-    }
+    TextEditingController get pinContollerField => _pinContollerField;
 
     Login({super.key});
 
     @override
     State<Login> createState() => _LoginState();
 
-    String getUsername(){
-      return _usernameContollerField.text;
-    }
-    String getPin(){
-      return _pinContollerField.text;
-    }
+    String getUsername() => _usernameContollerField.text;
+    String getPin() => _pinContollerField.text;
 }
 
 class _LoginState extends State<Login>{
