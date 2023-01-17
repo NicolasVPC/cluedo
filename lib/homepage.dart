@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cluedo/trypage.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
@@ -27,11 +28,11 @@ class _MyHomePageState extends State<MyHomePage> {
   final _client = http.Client(); // my client to connect
   var login = Login();
 
-  Future<http.Response?> _sendMessage(Map<String, String> data) async {
+  void _sendMessage(Map<String, String> data/*, Map<String, String> response*/) async {
     try {
       print("start\n");
 
-      http.Response response = await _client.post(
+      http.Response _response = await _client.post(
           Uri.http('localhost:8008'), 
           headers: <String, String>{
             'content-type': 'application/json',
@@ -39,19 +40,24 @@ class _MyHomePageState extends State<MyHomePage> {
           body: jsonEncode(data),
           encoding: Encoding.getByName('UTF-8')
         );
-      
+
       print("test\n");
-      var decodedResponse = utf8.decode(response.bodyBytes);
-      var decoded2 = response.body;
-      
+      var decodedResponse = utf8.decode(_response.bodyBytes);
+      var decodedBody = _response.body;
+      //response = jsonDecode(decodedBody);
+
       print("a"+decodedResponse);
-      print("b"+decoded2);
-      return response;
+      print("b"+decodedBody);
     } 
     catch(e) {
       print(e);
     }
-    return null;
+    finally {
+        Navigator.push(
+        context, 
+        MaterialPageRoute(builder: (context) => const TryPage()),
+        );
+    }
     //finally { // if I close the client then it is impossible to communicate with the server
     //  //client.close();
     //}
