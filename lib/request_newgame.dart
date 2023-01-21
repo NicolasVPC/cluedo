@@ -3,6 +3,8 @@
 Map<String, dynamic> map = jsonDecode(<myJSONString>);
 var myRootNode = Root.fromJson(map);
 */ 
+import 'dart:ffi';
+
 class CharacterList {
     String? charactername;
     String? img;
@@ -46,7 +48,7 @@ class RequestNewgame {
     String? gameid;
     List<PlayerIn?>? playerin;
     List<CharacterList?>? characterlist;
-    String? admin;
+    bool? admin;
 
     RequestNewgame({this.requesttype, this.gameid, this.playerin, this.characterlist, this.admin}); 
 
@@ -58,14 +60,14 @@ class RequestNewgame {
          json['player_in'].forEach((v) {
          playerin!.add(PlayerIn.fromJson(v));
         });
-      }
+        }
         if (json['character_list'] != null) {
          characterlist = <CharacterList>[];
          json['character_list'].forEach((v) {
          characterlist!.add(CharacterList.fromJson(v));
         });
-      }
-        admin = json['admin'];
+        }
+        admin = json['admin'] == 'true';
     }
 
     Map<String, dynamic> toJson() {
@@ -74,7 +76,8 @@ class RequestNewgame {
         data['game_id'] = gameid;
         data['player_in'] = playerin != null ? playerin!.map((v) => v?.toJson()).toList() : null;
         data['character_list'] = characterlist != null ? characterlist!.map((v) => v?.toJson()).toList() : null;
-        data['admin'] = admin;
+        data['admin'] = admin == true ? 'true' : 'false';
+
         return data;
     }
 }
