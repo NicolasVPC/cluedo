@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'homepage.dart';
 import 'package:provider/provider.dart';
-import 'networkhelper.dart';
+import 'network_helper.dart';
 import 'request_manager.dart';
 
 void main() => runApp(const MyApp());

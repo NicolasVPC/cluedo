@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'networkhelper.dart';
+import 'network_helper.dart';
 import 'login.dart';
 import 'request_manager.dart';
 
@@ -49,10 +49,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 builder: (context, networkHelper, _) => FloatingActionButton( // submit login form
                     onPressed: () {
                       NetworkHelper.sendMessage(
-                        {"username": login.usernameContollerField.text, "pin": login.pinContollerField.text}
+                        {
+                          "request_type": "login",
+                          "username": login.usernameContollerField.text, 
+                          "pin": login.pinContollerField.text
+                        }
                         ).then((response) {
                           //var decodedResponse = utf8.decode(_response!.bodyBytes);
                           var decodedBody = response!.body;
+                          
                           requestManager.setRequestNewGame(jsonDecode(decodedBody));
                           
                           Navigator.pushReplacement(
